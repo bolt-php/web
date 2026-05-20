@@ -26,21 +26,28 @@ class Route
 
     public function execute(array $params)
     {
+        // Define the core action based on the action type
         if (is_callable($this->action)) {
-            return \call_user_func($this->action, $params);
-        } else if (\is_string($this->action)) {
-            $this->action = explode('@', $this->action);
-            $this->action[0] = 'app\\http\\controllers\\' . $this->action[0];
+            // Direct callback
+            $coreAction = function () use ($params) {
+                return \call_user_func($this->action, $params);
+            };
+        } else {
+            // Controller string
+            if (\is_string($this->action)) {
+                $this->action = explode('@', $this->action);
+                $this->action[0] = 'app\\http\\controllers\\' . $this->action[0];
+            }
+
+            $controller = $this->action[0];
+            $action = $this->action[1];
+
+            // This is the final destination: the actual controller logic
+            $coreAction = function () use ($params, $controller, $action) {
+                $controller = app()->di->make($controller);
+                return app()->di->invoke($controller, $action, $params);
+            };
         }
-
-        $controller = $this->action[0];
-        $action = $this->action[1];
-
-        // This is the final destination: the actual controller logic
-        $coreAction = function () use ($params, $controller, $action) {
-            $controller = app()->di->make($controller);
-            return app()->di->invoke($controller, $action, $params);
-        };
 
         // If no middleware, just run the core
         if (empty($this->middlewares)) {
