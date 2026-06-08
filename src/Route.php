@@ -59,6 +59,9 @@ class Route
             array_reverse($this->middlewares),
             function ($next, $middleware) {
                 return function () use ($next, $middleware) {
+                    if (app()->registry->has($middleware)) {
+                        $middleware = app()->registry->get($middleware);
+                    }
                     // We resolve the middleware class and call its 'handle' method
                     $instance = app()->di->make($middleware);
                     return app()->di->invoke($instance, 'handle', [
