@@ -22,7 +22,7 @@ class Executor
             throw new NotFoundException();
         }
 
-        $result = $route['route']->execute($route['params']);
+        $result = $route['route']->execute($route['params'], app());
 
         if (!empty($result)) {
             if (\is_string($result)) {
