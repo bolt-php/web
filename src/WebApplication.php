@@ -4,6 +4,7 @@ namespace framework\web;
 
 use framework\Application;
 use framework\web\routing\Router;
+use Override;
 
 /**
  * The base class for all applications.
@@ -58,5 +59,24 @@ class WebApplication extends Application
     public static function flushInstance()
     {
         static::$instance = null;
+    }
+
+    #[Override]
+    public function registerRoutes(string $dir): void
+    {
+        $path = $dir . DIRECTORY_SEPARATOR . 'routes.php';
+        $app = $this;
+
+        require_once $path;
+
+        if (isset($router)) {
+            $this->router->mount('/', $router);
+        }
+    }
+
+    #[Override]
+    public function registerResources(string $namespace, string $dir): void
+    {
+        $this->config->set("paths.$namespace", $dir);
     }
 }
