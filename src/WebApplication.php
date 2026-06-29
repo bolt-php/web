@@ -34,7 +34,6 @@ class WebApplication extends Application
     public function init()
     {
         parent::init();
-        \framework\models\Model::registerTypeTransformer(\framework\web\request\UploadedFile::class, new \framework\web\transformers\UploadedFileTransformer());
     }
 
     public function run()
