@@ -2,7 +2,7 @@
 
 namespace framework\web\transformers;
 
-use framework\models\interfaces\TypeTransformer;
+use framework\validation\interfaces\TypeTransformer;
 use framework\web\request\UploadedFile;
 
 class UploadedFileTransformer implements TypeTransformer
