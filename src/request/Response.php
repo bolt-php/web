@@ -2,10 +2,11 @@
 
 namespace framework\web\request;
 
+use framework\contracts\request\ResponseInterface;
 use framework\web\response\ViewResponse;
 use framework\web\exceptions\NotFoundException;
 
-class Response {
+class Response implements ResponseInterface {
     /**
      * Send a plain text response
      * @param string $content
