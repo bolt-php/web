@@ -2,16 +2,17 @@
 
 namespace framework\web\request;
 
+use framework\contracts\request\RequestInterface;
 use stdClass;
 
 /**
  * Request Class
- * 
+ *
  * This class provides several helper
  * methods and utilities over the raw
  * $_GET, $_POST, $_FILES, etc. superglobals.
  */
-class Request
+class Request implements RequestInterface
 {
     protected $vals;
     protected $files;

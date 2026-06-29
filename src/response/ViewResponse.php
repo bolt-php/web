@@ -23,7 +23,13 @@ class ViewResponse extends HttpResponse
             $base = explode('.', $this->path);
             $dir = $path->resolve(substr($base[0] . '/', 0));
             $this->path = substr($this->path, strlen($base[0]) + 1);
-        } else {
+        }
+        else if (preg_match('/([a-z_]+)::(.+)/', $this->path, $matches)) {
+            // The view is namepsaced
+            $dir = $path->namespaced($matches[1], 'views');
+            $this->path = substr($this->path, strlen($matches[1]) + 2);
+        }
+        else {
             $dir = $path->resolve('@views/');
         }
 
